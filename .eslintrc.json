@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "google"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "linebreak-style": "off",
+        "object-curly-spacing": "off",
+        "quotes": "off",
+        "no-tabs": "off",
+        "indent": "off",
+        "valid-jsdoc": "off",
+        "arrow-parens": "off",
+        "no-var": "off",
+        "no-unused-vars": "off",
+        "max-len": "off",
+        "spaced-comment": "off"
+    }
+}

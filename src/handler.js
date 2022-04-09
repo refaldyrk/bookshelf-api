@@ -14,6 +14,7 @@ const mainPathHandler = (request, h) => {
 	return response;
 };
 
+//Solve
 const createBookHandler = (request, h) => {
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
 	const id = nanoid(7);
@@ -24,8 +25,8 @@ const createBookHandler = (request, h) => {
 	if (!name) {
 		return h
 			.response({
-				message: "Name is required",
-				status: "error",
+				status: "fail",
+				message: "Gagal menambahkan buku. Mohon isi nama buku",
 			})
 			.code(400);
 	}
@@ -33,8 +34,8 @@ const createBookHandler = (request, h) => {
 	if (readPage > pageCount) {
 		return h
 			.response({
-				message: "Read Page cannot be greater than Page Count",
-				status: "error",
+				status: "fail",
+				message: "Gagal menambahkan buku. readPage tidak boleh lebih besar dari pageCount",
 			})
 			.code(400);
 	}
@@ -59,8 +60,8 @@ const createBookHandler = (request, h) => {
 	if (isSuccess) {
 		return h
 			.response({
-				message: "Book has been created",
 				status: "success",
+				message: "Buku berhasil ditambahkan",
 				data: {
 					bookId: id,
 				},
@@ -70,12 +71,13 @@ const createBookHandler = (request, h) => {
 
 	return h
 		.response({
-			message: "Book has not been created",
 			status: "error",
+			message: "Buku gagal ditambahkan",
 		})
 		.code(500);
 };
 
+//Solve
 const getBookHandler = (request, h) => {
 	const arrayOfBook = [];
 
@@ -88,38 +90,42 @@ const getBookHandler = (request, h) => {
 		arrayOfBook.push(response);
 	});
 
-	return h.response({
-		message: "book has been retrieved",
-		status: "success",
-		data: {
-			books: arrayOfBook,
-		},
-	});
+	return h
+		.response({
+			status: "success",
+			data: {
+				books: arrayOfBook,
+			},
+		})
+		.code(200);
 };
 
+//Solve
 const detailBookHandler = (request, h) => {
 	const { id } = request.params;
 
 	const bookDetail = bookshelf.filter(book => book.id === id)[0];
 
 	if (bookDetail !== undefined) {
-		return {
-			status: "success",
-			message: "Book has been retrieved",
-			data: {
-				book: bookDetail,
-			},
-		};
+		return h
+			.response({
+				status: "success",
+				data: {
+					book: bookDetail,
+				},
+			})
+			.code(200);
 	}
 
 	return h
 		.response({
 			status: "error",
-			message: "Book has not been retrieved",
+			message: "Buku tidak ditemukan",
 		})
-		.code(500);
+		.code(404);
 };
 
+//Solve
 const editBookHandler = (request, h) => {
 	const { id } = request.params;
 	const { name, year, author, summary, publisher, pageCount, readPage, reading } = request.payload;
@@ -129,8 +135,8 @@ const editBookHandler = (request, h) => {
 	if (!name) {
 		return h
 			.response({
-				message: "Name is required",
-				status: "error",
+				status: "fail",
+				message: "Gagal memperbarui buku. Mohon isi nama buku",
 			})
 			.code(400);
 	}
@@ -138,8 +144,8 @@ const editBookHandler = (request, h) => {
 	if (readPage > pageCount) {
 		return h
 			.response({
-				message: "Read Page cannot be greater than Page Count",
-				status: "error",
+				status: "fail",
+				message: "Gagal memperbarui buku. readPage tidak boleh lebih besar dari pageCount",
 			})
 			.code(400);
 	}
@@ -162,23 +168,21 @@ const editBookHandler = (request, h) => {
 
 		return h
 			.response({
-				message: "Book has been updated",
 				status: "success",
-				data: {
-					bookId: id,
-				},
+				message: "Buku berhasil diperbarui",
 			})
 			.code(200);
 	}
 
 	return h
 		.response({
-			message: "Book has not been updated",
-			status: "error",
+			status: "fail",
+			message: "Gagal memperbarui buku. Id tidak ditemukan",
 		})
 		.code(404);
 };
 
+//Solve
 const deleteBookHandler = (request, h) => {
 	const { id } = request.params;
 
@@ -188,7 +192,7 @@ const deleteBookHandler = (request, h) => {
 		bookshelf.splice(index, 1);
 		return h
 			.response({
-				message: "Book has been deleted",
+				message: "Buku berhasil dihapus",
 				status: "success",
 			})
 			.code(200);
@@ -196,8 +200,8 @@ const deleteBookHandler = (request, h) => {
 
 	return h
 		.response({
-			message: "Book has not been deleted",
-			status: "error",
+			status: "fail",
+			message: "Buku gagal dihapus, id tidak ditemukan",
 		})
 		.code(404);
 };
